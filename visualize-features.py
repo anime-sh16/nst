@@ -51,7 +51,13 @@ def plot_feature_maps(features_tensor: torch.Tensor, output_path: Path, num_chan
 
 def main():
     script_dir = Path(__file__).parent.resolve()
-    device = torch.device("mps" if torch.mps.is_available() else "cpu")
+    
+    if torch.cuda.is_available():
+        device = torch.device("cuda")
+    elif torch.mps.is_available():
+        device = torch.device("mps")
+    else:
+        device = torch.device("cpu")
     print(f"Using device: {device}")
 
     input_dir = script_dir / "inputs"

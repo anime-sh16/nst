@@ -26,7 +26,12 @@ def run_style_transfer(
     Their ratio is what matters, higher beta/alpha means more stylized
     at the cost of content structure.
     """
-    device = torch.device("mps" if torch.mps.is_available() else "cpu")
+    if torch.cuda.is_available():
+        device = torch.device("cuda")
+    elif torch.mps.is_available():
+        device = torch.device("mps")
+    else:
+        device = torch.device("cpu")
     print(f"Using device: {device}")
 
     content_tensor = load_image(content_path).to(device)
